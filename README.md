@@ -1,2 +1,2 @@
 # scripts
-Random scripts and tools
+This is a collection of random scripts and tools, use at your own risk
