@@ -2,7 +2,7 @@
 
 import boto3
 ec2 = boto3.resource('ec2')
-ami_list = []
+
 def ami_lookup(ami_id):
     image_iterator = ec2.images.filter(
         ImageIds=[
