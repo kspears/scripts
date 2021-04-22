@@ -2,7 +2,7 @@
 
 import boto3
 ec2 = boto3.resource('ec2')
-
+ami_list = {}
 def ami_lookup(ami_id):
     image_iterator = ec2.images.filter(
         ImageIds=[
@@ -16,14 +16,17 @@ def ami_lookup(ami_id):
 instances = ec2.instances.filter(
     Filters=[{'Name': 'instance-state-name', 'Values': ['running']}])
 for instance in instances:
-    try:
-        ami_name = ami_lookup(instance.image.id)
-    except:
-        ami_name = "None"
+    if instance.image.id not in ami_list.keys():
+        try:
+            ami_name = ami_lookup(instance.image.id)
+        except:
+            ami_name = "Unknown"
+        ami_list[instance.image.id] = ami_name
 
+for ami in ami_list:
     print(
-        "Id: {0}\nPlatform: {1}\nType: {2}\nPublic IPv4: {3}\nAMI: {4}\nAMI Name: {5}\nState: {6}\n".format(
-        instance.id, instance.platform, instance.instance_type, instance.public_ip_address, instance.image.id, ami_name, instance.state, 
+        "AMI ID: {0}\nAMI Name: {1}\n".format(
+        ami, ami_list[ami] 
         )
     )
 
